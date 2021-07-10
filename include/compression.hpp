@@ -7,7 +7,7 @@
 
 namespace myPNG{
     enum class CompressionType{
-        
+        ZLIB = 0
     };
 
 }

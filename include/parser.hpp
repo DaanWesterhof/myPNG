@@ -10,9 +10,19 @@
 
 namespace myPNG{
 
-    bool fileSignatureIsValid(uint8_t * image_data);
 
-    Image parseImageData(uint8_t * image_data, unsigned int bit_depth, bool alpha, ColorTypes type,  )
+    bool fileSignatureIsValid(const uint8_t * image_data);
+
+    uint8_t *fetchChunkPointer(int chunk_number, uint8_t *image_data);
+
+    uint8_t *fetchNextChunk(uint8_t *image_data);
+
+
+
+
+    Image parseImageData(uint8_t * image_data, unsigned int bit_depth, bool alpha, ColorTypes type,  );
+
+
 
 
 
