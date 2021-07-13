@@ -3,6 +3,7 @@
 //
 
 #include "../include/parser.hpp"
+#include "../include/chunks.hpp"
 
 bool myPNG::fileSignatureIsValid(const uint8_t *image_data) {
     uint8_t signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
@@ -15,34 +16,17 @@ bool myPNG::fileSignatureIsValid(const uint8_t *image_data) {
     return true;
 }
 
-unsigned int getChunkSize(const uint8_t *image_data){
-    unsigned int index = 8;
-    unsigned int chunk_size = 0u;
-    for(int i = 0; i < 3; i++){
-        chunk_size |= (unsigned int)(image_data[index + i] << (uint8_t)((3-i)*8));
-    }
+myPNG::ImageData myPNG::getImageData(uint8_t *image_data) {
+    uint8_t chunkname[4] = {'I', 'H', 'D', 'R'};
+    uint8_t * IHDR = myPNG::getChunkByName(chunkname, image_data);
+    ImageData data;
+    data.width = (IHDR[8] <<3u) + (IHDR[9] << 2u) + (IHDR[10] <<1u)  + IHDR[11];
+    data.height = (IHDR[12] <<3u) + (IHDR[13] << 2u) + (IHDR[14] <<1u)  + IHDR[15];
+    data.bit_depth = IHDR[16];
+    data.type = myPNG::ColorTypes(IHDR[17]);
+    data.c_method = myPNG::CompressionMethod(IHDR[18]);
+    data.f_method = myPNG::FilterMethod(IHDR[19]);
+    data.i_method = myPNG::InterlaceMethod(IHDR[20]);
+    return data;
 }
 
-uint8_t *myPNG::fetchChunkPointer(int chunk_number, uint8_t *image_data) {
-    unsigned int index = 8;
-    int current_chunk = 0;
-    unsigned int chunk_size = 0u;
-    while(current_chunk != chunk_number){
-        for(int i = 0; i < 3; i++){
-            chunk_size |= (unsigned int)(image_data[index + i] << (uint8_t)((3-i)*8));
-        }
-        //add chunk size locations, chunk type and crc
-        index += 12;
-        index += chunk_size;
-        current_chunk++;
-    }
-    return image_data + index;
-}
-
-uint8_t *myPNG::fetchNextChunk(uint8_t *image_data) {
-    unsigned int index = 20;
-    unsigned int chunk_size = getChunkSize(image_data);
-    //add chunk size locations, chunk type and crc
-    index += chunk_size;
-    return image_data + index;
-};

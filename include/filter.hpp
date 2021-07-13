@@ -19,11 +19,11 @@ namespace myPNG{
 
     FilterType getFilterType(uint8_t * image_data);
 
-    Image undoFilter(uint8_t * image_data, FilterType type);
-    Image undoSubFilter(uint8_t * image_data);
-    Image undoUpFilter(uint8_t * image_data);
-    Image undoAverageFilter(uint8_t * image_data);
-    Image undoPaethFilter(uint8_t * image_data);
+    void undoFilter(ImageData data,uint8_t * image_data);
+    void undoSubFilter(uint8_t *idat_data, size_t size);
+    void undoUpFilter(uint8_t *idat_data, uint8_t *idat_data_last, size_t size);
+    void undoAverageFilter(uint8_t *idat_data, uint8_t *idat_data_last, size_t size);
+    void undoPaethFilter(uint8_t *idat_data, const uint8_t *idat_data_last, size_t size);
 
 }
 

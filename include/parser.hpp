@@ -13,14 +13,13 @@ namespace myPNG{
 
     bool fileSignatureIsValid(const uint8_t * image_data);
 
-    uint8_t *fetchChunkPointer(int chunk_number, uint8_t *image_data);
-
-    uint8_t *fetchNextChunk(uint8_t *image_data);
+    ImageData getImageData(uint8_t * image_data);
 
 
 
 
-    Image parseImageData(uint8_t * image_data, unsigned int bit_depth, bool alpha, ColorTypes type,  );
+
+    Image parseImageData(uint8_t * image_data, ImageData data);
 
 
 
